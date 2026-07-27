@@ -1,7 +1,10 @@
 import hero from "../assets/hero1.png";
 import "../styles/Home.css";
+import { useNavigate } from "react-router-dom";
+
 
 const Home = () => {
+  const navigate=useNavigate();
   return (
     <>
       {/* Hero Section */}
@@ -19,13 +22,17 @@ const Home = () => {
             Experience the finest dining with authentic Hyderabadi and Mughlai
             cuisine.
           </p>
+                    <div className="buttons">
+            <button onClick={()=>navigate("/menu")}>
+              view Menu
+            </button>
 
-          <div className="buttons">
-            <button>View Menu</button>
-            <button>Book a Table</button>
+            <button onClick={()=>navigate("/reservation")}>
+              Book a Table</button>
           </div>
         </div>
       </section>
+
 
       {/* Popular Dishes Section */}
       <section className="popular-dishes-section">

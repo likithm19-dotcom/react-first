@@ -5,6 +5,7 @@ function Reservation() {
   const [formData, setFormData] = useState({
     name: '',
     email: '',
+    phone: '',
     date: '',
     time: '',
     guests: ''
@@ -18,10 +19,45 @@ function Reservation() {
     }));
   };
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
-    alert('Reservation submitted!');
-    console.log(formData);
+
+    try {
+      const requestBody = JSON.stringify(formData);
+      console.log("Submitting reservation:", requestBody);
+
+      const response = await fetch(
+        "http://localhost:3000/api/reservations",
+        {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: requestBody,
+        }
+      );
+
+      if (!response.ok) {
+        const errorText = await response.text();
+        throw new Error(errorText || response.statusText);
+      }
+
+      const data = await response.json();
+
+      alert(data.message);
+
+      setFormData({
+        name: "",
+        email: "",
+        phone: "",
+        date: "",
+        time: "",
+        guests: "",
+      });
+    } catch (error) {
+      console.log(error);
+      alert("Something went wrong");
+    }
   };
 
   return (
@@ -44,6 +80,14 @@ function Reservation() {
           onChange={handleInputChange}
           required
         />
+        <input
+        type="tel"
+        name="phone"
+        placeholder="Enter Phone Number"
+        value={formData.phone}
+        onChange={handleInputChange}
+        required
+       />
         <input
           type="date"
           name="date"
@@ -69,7 +113,7 @@ function Reservation() {
         <button type="submit">Submit</button>
       </form>
     </div>
-  );
+  )
 }
 
 export default Reservation;
