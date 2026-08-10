@@ -1,0 +1,155 @@
+/* ============================= */
+/* REGISTER PAGE */
+/* ============================= */
+
+.register-page {
+  width: 100%;
+  min-height: calc(100vh - 85px);
+
+  display: flex;
+  justify-content: center;
+  align-items: flex-start;
+
+  padding-top: 40px;
+
+  box-sizing: border-box;
+}
+
+
+/* ============================= */
+/* REGISTER BOX */
+/* ============================= */
+
+.register-container {
+  width: 525px !important;
+
+  padding: 30px 50px;
+
+  background-color: white;
+
+  border-radius: 20px;
+
+  box-sizing: border-box;
+
+  text-align: center;
+
+  margin: 0 auto;
+}
+
+
+/* ============================= */
+/* HEADING */
+/* ============================= */
+
+.register-container h1 {
+  margin: 0 0 28px 0;
+
+  font-size: 50px;
+  font-weight: 500;
+
+  color: #111;
+}
+
+
+/* ============================= */
+/* INPUT GROUP */
+/* ============================= */
+
+.register-input-group {
+  width: 100%;
+  margin-bottom: 25px;
+}
+
+
+/* ============================= */
+/* INPUTS */
+/* ============================= */
+
+.register-input-group input {
+  width: 100%;
+  height: 62px;
+
+  padding: 0 18px;
+
+  box-sizing: border-box;
+
+  font-size: 20px;
+
+  color: #333;
+
+  background-color: white;
+
+  border: 1px solid #ccc;
+
+  border-radius: 10px;
+
+  outline: none;
+}
+
+
+.register-input-group input::placeholder {
+  color: #666;
+}
+
+
+.register-input-group input:focus {
+  border-color: #111;
+}
+
+
+/* ============================= */
+/* REGISTER BUTTON */
+/* ============================= */
+
+.register-button {
+  width: 100%;
+  height: 62px;
+
+  margin-top: 5px;
+
+  background-color: #111;
+
+  color: white;
+
+  border: none;
+
+  border-radius: 10px;
+
+  font-size: 20px;
+
+  font-weight: bold;
+
+  cursor: pointer;
+}
+
+
+.register-button:hover {
+  background-color:orange;
+}
+
+
+/* ============================= */
+/* LOGIN LINK */
+/* ============================= */
+
+.login-link {
+  margin-top: 25px;
+
+  font-size: 17px;
+
+  color: #555;
+}
+
+
+.login-link a {
+  color: #111;
+
+  font-weight: bold;
+
+  text-decoration: none;
+}
+
+
+.login-link a:hover {
+  text-decoration: underline;
+}

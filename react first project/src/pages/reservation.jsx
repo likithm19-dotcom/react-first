@@ -1,30 +1,50 @@
-import { useState } from 'react';
-import '../styles/reservation.css';
+import { useState, useEffect } from "react";
+import "../styles/reservation.css";
 
 function Reservation() {
+  // Get logged-in user
+  const user = JSON.parse(localStorage.getItem("user"));
+
+  const [tables, setTables] = useState([]);
+
   const [formData, setFormData] = useState({
-    name: '',
-    email: '',
-    phone: '',
-    date: '',
-    time: '',
-    guests: ''
+    name: user?.name || "",
+    email: user?.email || "",
+    phone: user?.phone || "",
+    date: "",
+    time: "",
+    guests: "",
+    table_id: "",
   });
 
+  // Get tables
+  useEffect(() => {
+    fetch("http://localhost:3000/api/tables")
+      .then((res) => res.json())
+      .then((data) => {
+        setTables(data);
+      })
+      .catch((err) => {
+        console.error("Error fetching tables:", err);
+      });
+  }, []);
+
+  // Handle input
   const handleInputChange = (e) => {
     const { name, value } = e.target;
+
     setFormData((prev) => ({
       ...prev,
-      [name]: value
+      [name]: value,
     }));
   };
 
+  // Submit reservation
   const handleSubmit = async (e) => {
     e.preventDefault();
 
     try {
-      const requestBody = JSON.stringify(formData);
-      console.log("Submitting reservation:", requestBody);
+      console.log("Submitting reservation:", formData);
 
       const response = await fetch(
         "http://localhost:3000/api/reservations",
@@ -33,87 +53,167 @@ function Reservation() {
           headers: {
             "Content-Type": "application/json",
           },
-          body: requestBody,
+          body: JSON.stringify(formData),
         }
       );
 
-      if (!response.ok) {
-        const errorText = await response.text();
-        throw new Error(errorText || response.statusText);
-      }
-
       const data = await response.json();
 
+      // Error
+      if (!response.ok) {
+        alert(data.message);
+        return;
+      }
+
+      // Success
       alert(data.message);
 
+      // Reset only reservation fields
+      // Keep logged-in user's details
       setFormData({
-        name: "",
-        email: "",
-        phone: "",
+        name: user?.name || "",
+        email: user?.email || "",
+        phone: user?.phone || "",
         date: "",
         time: "",
         guests: "",
+        table_id: "",
       });
     } catch (error) {
-      console.log(error);
-      alert("Something went wrong");
+      console.error("Reservation Error:", error);
+      alert("Something went wrong. Please try again.");
     }
   };
 
   return (
-    <div className="reservation-container">
-      <h1>Reserve a Table</h1>
-      <form className="reservation-form" onSubmit={handleSubmit}>
-        <input
-          type="text"
-          name="name"
-          placeholder="Enter Name"
-          value={formData.name}
-          onChange={handleInputChange}
-          required
-        />
-        <input
-          type="email"
-          name="email"
-          placeholder="Enter Email"
-          value={formData.email}
-          onChange={handleInputChange}
-          required
-        />
-        <input
-        type="tel"
-        name="phone"
-        placeholder="Enter Phone Number"
-        value={formData.phone}
-        onChange={handleInputChange}
-        required
-       />
-        <input
-          type="date"
-          name="date"
-          value={formData.date}
-          onChange={handleInputChange}
-          required
-        />
-        <input
-          type="time"
-          name="time"
-          value={formData.time}
-          onChange={handleInputChange}
-          required
-        />
-        <input
-          type="number"
-          name="guests"
-          placeholder="Number of Guests"
-          value={formData.guests}
-          onChange={handleInputChange}
-          required
-        />
-        <button type="submit">Submit</button>
-      </form>
+    <div className="reservation-page">
+
+      <div className="reservation-card">
+
+        <h1>Reserve a Table</h1>
+
+        <p className="reservation-subtitle">
+          Book your table at Nawabs Restaurant
+        </p>
+
+        <form className="reservation-form" onSubmit={handleSubmit}>
+
+          {/* Name */}
+          <div className="form-group">
+            <label>Name</label>
+
+            <input
+              type="text"
+              name="name"
+              value={formData.name}
+              readOnly
+            />
+          </div>
+
+          {/* Email */}
+          <div className="form-group">
+            <label>Email</label>
+
+            <input
+              type="email"
+              name="email"
+              value={formData.email}
+              readOnly
+            />
+          </div>
+
+          {/* Phone */}
+          <div className="form-group">
+            <label>Phone</label>
+
+            <input
+              type="text"
+              name="phone"
+              value={formData.phone}
+              readOnly
+            />
+          </div>
+
+          {/* Date */}
+          <div className="form-group">
+            <label>Date</label>
+
+            <input
+              type="date"
+              name="date"
+              value={formData.date}
+              onChange={handleInputChange}
+              required
+            />
+          </div>
+
+          {/* Time */}
+          <div className="form-group">
+            <label>Time</label>
+
+            <input
+              type="time"
+              name="time"
+              value={formData.time}
+              onChange={handleInputChange}
+              required
+            />
+          </div>
+
+          {/* Guests */}
+          <div className="form-group">
+            <label>Number of Guests</label>
+
+            <input
+              type="number"
+              name="guests"
+              value={formData.guests}
+              onChange={handleInputChange}
+              min="1"
+              required
+            />
+          </div>
+
+          {/* Table */}
+          <div className="form-group">
+            <label>Select a Table</label>
+
+            <select
+              name="table_id"
+              value={formData.table_id}
+              onChange={handleInputChange}
+              required
+            >
+              <option value="">
+                Select a table
+              </option>
+
+              {tables.map((table) => (
+                <option
+                  key={table.id}
+                  value={table.id}
+                >
+                  Table {table.table_number} -{" "}
+                  {table.capacity} seats
+                </option>
+              ))}
+            </select>
+          </div>
+
+          {/* Submit */}
+          <button
+            type="submit"
+            className="reservation-btn"
+          >
+            Reserve Table
+          </button>
+
+        </form>
+
+      </div>
+
     </div>
-  )
+  );
 }
 
 export default Reservation;
