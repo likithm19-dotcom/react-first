@@ -19,7 +19,7 @@ function Reservation() {
 
   // Get tables
   useEffect(() => {
-    fetch("http://localhost:3000/api/tables")
+    fetch("https://react-first-79uv.onrender.com/api/tables")
       .then((res) => res.json())
       .then((data) => {
         setTables(data);
@@ -47,7 +47,7 @@ function Reservation() {
       console.log("Submitting reservation:", formData);
 
       const response = await fetch(
-        "http://localhost:3000/api/reservations",
+        "https://react-first-79uv.onrender.com/api/reservations",
         {
           method: "POST",
           headers: {
@@ -86,132 +86,115 @@ function Reservation() {
   };
 
   return (
-    <div className="reservation-page">
+    <div className="reservation-card">
+      <h1>Reserve a Table</h1>
 
-      <div className="reservation-card">
+      <p className="reservation-subtitle">
+        Book your table at Nawabs Restaurant
+      </p>
 
-        <h1>Reserve a Table</h1>
+      <form className="reservation-form" onSubmit={handleSubmit}>
+        {/* Name */}
+        <div className="form-group">
+          <label>Name</label>
 
-        <p className="reservation-subtitle">
-          Book your table at Nawabs Restaurant
-        </p>
+          <input
+            type="text"
+            name="name"
+            value={formData.name}
+            readOnly
+          />
+        </div>
 
-        <form className="reservation-form" onSubmit={handleSubmit}>
+        {/* Email */}
+        <div className="form-group">
+          <label>Email</label>
 
-          {/* Name */}
-          <div className="form-group">
-            <label>Name</label>
+          <input
+            type="email"
+            name="email"
+            value={formData.email}
+            readOnly
+          />
+        </div>
 
-            <input
-              type="text"
-              name="name"
-              value={formData.name}
-              readOnly
-            />
-          </div>
+        {/* Phone */}
+        <div className="form-group">
+          <label>Phone</label>
 
-          {/* Email */}
-          <div className="form-group">
-            <label>Email</label>
+          <input
+            type="text"
+            name="phone"
+            value={formData.phone}
+            readOnly
+          />
+        </div>
 
-            <input
-              type="email"
-              name="email"
-              value={formData.email}
-              readOnly
-            />
-          </div>
+        {/* Date */}
+        <div className="form-group">
+          <label>Date</label>
 
-          {/* Phone */}
-          <div className="form-group">
-            <label>Phone</label>
+          <input
+            type="date"
+            name="date"
+            value={formData.date}
+            onChange={handleInputChange}
+            required
+          />
+        </div>
 
-            <input
-              type="text"
-              name="phone"
-              value={formData.phone}
-              readOnly
-            />
-          </div>
+        {/* Time */}
+        <div className="form-group">
+          <label>Time</label>
 
-          {/* Date */}
-          <div className="form-group">
-            <label>Date</label>
+          <input
+            type="time"
+            name="time"
+            value={formData.time}
+            onChange={handleInputChange}
+            required
+          />
+        </div>
 
-            <input
-              type="date"
-              name="date"
-              value={formData.date}
-              onChange={handleInputChange}
-              required
-            />
-          </div>
+        {/* Guests */}
+        <div className="form-group">
+          <label>Number of Guests</label>
 
-          {/* Time */}
-          <div className="form-group">
-            <label>Time</label>
+          <input
+            type="number"
+            name="guests"
+            value={formData.guests}
+            onChange={handleInputChange}
+            min="1"
+            required
+          />
+        </div>
 
-            <input
-              type="time"
-              name="time"
-              value={formData.time}
-              onChange={handleInputChange}
-              required
-            />
-          </div>
+        {/* Table */}
+        <div className="form-group">
+          <label>Select a Table</label>
 
-          {/* Guests */}
-          <div className="form-group">
-            <label>Number of Guests</label>
-
-            <input
-              type="number"
-              name="guests"
-              value={formData.guests}
-              onChange={handleInputChange}
-              min="1"
-              required
-            />
-          </div>
-
-          {/* Table */}
-          <div className="form-group">
-            <label>Select a Table</label>
-
-            <select
-              name="table_id"
-              value={formData.table_id}
-              onChange={handleInputChange}
-              required
-            >
-              <option value="">
-                Select a table
-              </option>
-
-              {tables.map((table) => (
-                <option
-                  key={table.id}
-                  value={table.id}
-                >
-                  Table {table.table_number} -{" "}
-                  {table.capacity} seats
-                </option>
-              ))}
-            </select>
-          </div>
-
-          {/* Submit */}
-          <button
-            type="submit"
-            className="reservation-btn"
+          <select
+            name="table_id"
+            value={formData.table_id}
+            onChange={handleInputChange}
+            required
           >
-            Reserve Table
-          </button>
+            <option value="">Select a table</option>
 
-        </form>
+            {tables.map((table) => (
+              <option key={table.id} value={table.id}>
+                Table {table.table_number} - {table.capacity} seats
+              </option>
+            ))}
+          </select>
+        </div>
 
-      </div>
-
+        {/* Submit */}
+        <button type="submit" className="reservation-btn">
+          Reserve Table
+        </button>
+      </form>
     </div>
   );
 }

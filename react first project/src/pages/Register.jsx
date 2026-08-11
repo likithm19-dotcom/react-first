@@ -15,7 +15,7 @@ function Register() {
 
     try {
       const response = await fetch(
-        "http://localhost:3000/api/users/register",
+        "https://react-first-79uv.onrender.com/api/users/register",
         {
           method: "POST",
           headers: {
@@ -46,11 +46,9 @@ function Register() {
 
   return (
     <div className="register-container">
-
       <h1>Register</h1>
 
       <form onSubmit={handleRegister}>
-
         <div className="register-input-group">
           <input
             type="text"
@@ -91,21 +89,15 @@ function Register() {
           />
         </div>
 
-        <button
-          type="submit"
-          className="register-button"
-        >
+        <button type="submit" className="register-button">
           Register
         </button>
 
-        {/* Login link */}
         <div className="login-link">
           Already have an account?{" "}
           <Link to="/login">Login</Link>
         </div>
-
       </form>
-
     </div>
   );
 }

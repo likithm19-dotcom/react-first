@@ -4,7 +4,7 @@ const Menu = () => {
   const [menuItems, setMenuItems] = useState([]);
 
   useEffect(() => {
-    fetch("http://localhost:3000/api/menu")
+    fetch("https://react-first-79uv.onrender.com/api/menu")
       .then((res) => res.json())
       .then((data) => setMenuItems(data))
       .catch((err) => console.log(err));
