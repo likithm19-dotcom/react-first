@@ -28,7 +28,7 @@ function MyReservations() {
       const token = localStorage.getItem("token");
 
       const response = await fetch(
-        "http://localhost:3000/api/reservations/me",
+        "https://react-first-79uv.onrender.com/api/reservations/me",
         {
           headers: {
             Authorization: token ? `Bearer ${token}` : "",
@@ -101,7 +101,7 @@ function MyReservations() {
 
     try {
       const response = await fetch(
-        `http://localhost:3000/api/reservations/${editReservation.id}`,
+        `https://react-first-79uv.onrender.com/api/reservations/${editReservation.id}`,
         {
           method: "PUT",
 
@@ -152,7 +152,7 @@ function MyReservations() {
 
     try {
       const response = await fetch(
-        `http://localhost:3000/api/reservations/${id}`,
+        `https://react-first-79uv.onrender.com/api/reservations/${id}`,
         {
           method: "DELETE",
         }
