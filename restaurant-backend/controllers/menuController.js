@@ -1,18 +1,18 @@
 const menuModel = require("../models/menuModel");
 
-const getMenu = async (req, res) => {
-  try {
-    const menu = await menuModel.getAllMenu();
+const getMenu = (req, res) => {
+  menuModel.getMenu((err, results) => {
+    if (err) {
+      console.error("MENU DATABASE ERROR:", err);
 
-    res.status(200).json(menu);
-  } catch (error) {
-    console.error("MENU DATABASE ERROR:", error);
+      return res.status(500).json({
+        message: "Error fetching menu",
+        error: err.message,
+      });
+    }
 
-    res.status(500).json({
-      message: "Error fetching menu",
-      error: error.message,
-    });
-  }
+    res.status(200).json(results);
+  });
 };
 
 module.exports = {
