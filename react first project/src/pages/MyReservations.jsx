@@ -39,16 +39,13 @@ function MyReservations() {
       const data = await response.json();
 
       if (!response.ok) {
-        console.error(data);
+        console.error("Error fetching reservations:", data);
         return;
       }
 
       setReservations(data);
     } catch (error) {
-      console.error(
-        "Error fetching reservations:",
-        error
-      );
+      console.error("Error fetching reservations:", error);
     }
   };
 
@@ -67,58 +64,35 @@ function MyReservations() {
   const handleUpdateReservation = async () => {
     if (!editReservation) return;
 
-    // IMPORTANT:
-    // Send DATE as YYYY-MM-DD only.
-    const selectedDate = formatDate(
-      editReservation.date
-    );
+    const selectedDate = formatDate(editReservation.date);
 
     const payload = {
       name: editReservation.name,
       email: editReservation.email,
       phone: editReservation.phone,
-
       date: selectedDate,
-
       time: editReservation.time,
-
-      guests: Number(
-        editReservation.guests
-      ),
-
+      guests: Number(editReservation.guests),
       table_id: editReservation.table_id,
     };
 
-    console.log(
-      "DATE BEING SENT:",
-      selectedDate
-    );
-
-    console.log(
-      "UPDATE PAYLOAD:",
-      payload
-    );
+    console.log("UPDATE PAYLOAD:", payload);
 
     try {
       const response = await fetch(
         `https://react-first-79uv.onrender.com/api/reservations/${editReservation.id}`,
         {
           method: "PUT",
-
           headers: {
             "Content-Type": "application/json",
           },
-
           body: JSON.stringify(payload),
         }
       );
 
       const data = await response.json();
 
-      console.log(
-        "UPDATE RESPONSE:",
-        data
-      );
+      console.log("UPDATE RESPONSE:", data);
 
       alert(data.message);
 
@@ -126,16 +100,12 @@ function MyReservations() {
         return;
       }
 
-      // Refresh reservations
       await handleSearch();
 
       setEditReservation(null);
-
     } catch (error) {
-      console.error(
-        "Update error:",
-        error
-      );
+      console.error("Update error:", error);
+      alert("Unable to update reservation.");
     }
   };
 
@@ -167,12 +137,9 @@ function MyReservations() {
       }
 
       await handleSearch();
-
     } catch (error) {
-      console.error(
-        "Delete error:",
-        error
-      );
+      console.error("Delete error:", error);
+      alert("Unable to delete reservation.");
     }
   };
 
@@ -182,11 +149,8 @@ function MyReservations() {
       <h1>My Reservations</h1>
 
       {reservations.length === 0 ? (
-
         <p>No reservations found.</p>
-
       ) : (
-
         <table className="reservation-table">
 
           <thead>
@@ -195,84 +159,66 @@ function MyReservations() {
               <th>Date</th>
               <th>Time</th>
               <th>Guests</th>
-              <th>Table</th>
-              <th>Capacity</th>
+              <th>Table ID</th>
               <th>Action</th>
             </tr>
           </thead>
 
           <tbody>
+            {reservations.map((reservation) => (
+              <tr key={reservation.id}>
 
-            {reservations.map(
-              (reservation) => (
+                <td>
+                  {reservation.name}
+                </td>
 
-                <tr
-                  key={reservation.id}
-                >
+                <td>
+                  {formatDate(reservation.date)}
+                </td>
 
-                  <td>
-                    {reservation.name}
-                  </td>
+                <td>
+                  {reservation.time}
+                </td>
 
-                  {/* DATE */}
+                <td>
+                  {reservation.guests}
+                </td>
 
-                  <td>
-                    {formatDate(
-                      reservation.date
-                    )}
-                  </td>
+                <td>
+                  {reservation.table_id}
+                </td>
 
-                  <td>
-                    {reservation.time}
-                  </td>
+                <td>
 
-                  <td>
-                    {reservation.guests}
-                  </td>
+                  <button
+                    type="button"
+                    className="edit-btn"
+                    onClick={() =>
+                      setEditReservation(reservation)
+                    }
+                  >
+                    Edit
+                  </button>
 
-                  <td>
-                    {reservation.table_number}
-                  </td>
+                  <button
+                    type="button"
+                    className="delete-btn"
+                    onClick={() =>
+                      handleDeleteReservation(
+                        reservation.id
+                      )
+                    }
+                  >
+                    Delete
+                  </button>
 
-                  <td>
-                    {reservation.capacity}
-                  </td>
+                </td>
 
-                  <td>
-
-                    <button
-                      className="edit-btn"
-                      onClick={() =>
-                        setEditReservation(
-                          reservation
-                        )
-                      }
-                    >
-                      Edit
-                    </button>
-
-                    <button
-                      className="delete-btn"
-                      onClick={() =>
-                        handleDeleteReservation(
-                          reservation.id
-                        )
-                      }
-                    >
-                      Delete
-                    </button>
-
-                  </td>
-
-                </tr>
-
-              )
-            )}
-
+              </tr>
+            ))}
           </tbody>
 
         </table>
-
       )}
 
       {/* ===============================
@@ -280,32 +226,20 @@ function MyReservations() {
       =============================== */}
 
       {editReservation && (
-
         <div className="edit-popup">
 
-          <h2>
-            Edit Reservation
-          </h2>
+          <h2>Edit Reservation</h2>
 
           {/* DATE */}
 
-          <label>
-            Date
-          </label>
+          <label>Date</label>
 
           <input
             type="date"
-
-            value={formatDate(
-              editReservation.date
-            )}
-
+            value={formatDate(editReservation.date)}
             onChange={(e) =>
               setEditReservation({
                 ...editReservation,
-
-                // Store exactly what
-                // date input gives us
                 date: e.target.value,
               })
             }
@@ -313,17 +247,11 @@ function MyReservations() {
 
           {/* TIME */}
 
-          <label>
-            Time
-          </label>
+          <label>Time</label>
 
           <input
             type="time"
-
-            value={
-              editReservation.time || ""
-            }
-
+            value={editReservation.time || ""}
             onChange={(e) =>
               setEditReservation({
                 ...editReservation,
@@ -334,17 +262,11 @@ function MyReservations() {
 
           {/* PHONE */}
 
-          <label>
-            Phone
-          </label>
+          <label>Phone</label>
 
           <input
             type="text"
-
-            value={
-              editReservation.phone || ""
-            }
-
+            value={editReservation.phone || ""}
             onChange={(e) =>
               setEditReservation({
                 ...editReservation,
@@ -355,17 +277,12 @@ function MyReservations() {
 
           {/* GUESTS */}
 
-          <label>
-            Guests
-          </label>
+          <label>Guests</label>
 
           <input
             type="number"
-
-            value={
-              editReservation.guests || ""
-            }
-
+            min="1"
+            value={editReservation.guests || ""}
             onChange={(e) =>
               setEditReservation({
                 ...editReservation,
@@ -374,30 +291,46 @@ function MyReservations() {
             }
           />
 
+          {/* TABLE ID */}
+
+          <label>Table ID</label>
+
+          <input
+            type="number"
+            value={editReservation.table_id || ""}
+            onChange={(e) =>
+              setEditReservation({
+                ...editReservation,
+                table_id: e.target.value,
+              })
+            }
+          />
+
           {/* BUTTONS */}
 
-         <div className="popup-buttons">
+          <div className="popup-buttons">
 
-  <button
-    type="button"
-    className="update-btn"
-    onClick={handleUpdateReservation}
-  >
-    Update
-  </button>
+            <button
+              type="button"
+              className="update-btn"
+              onClick={handleUpdateReservation}
+            >
+              Update
+            </button>
 
-  <button
-    type="button"
-    className="cancel-btn"
-    onClick={() => setEditReservation(null)}
-  >
-    Cancel
-  </button>
+            <button
+              type="button"
+              className="cancel-btn"
+              onClick={() =>
+                setEditReservation(null)
+              }
+            >
+              Cancel
+            </button>
 
-</div>
+          </div>
 
         </div>
-
       )}
 
     </div>
